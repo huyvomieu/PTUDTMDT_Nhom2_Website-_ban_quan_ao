@@ -10,7 +10,7 @@
                 <h4 class="card-title">Order List</h4>
                 <hr />
                 <div class="table-responsive">
-                    <asp:Repeater ID="rProduct" runat="server" OnItemCommand="rCategory_ItemCommand" OnItemDataBound="rProduct_ItemDataBound">
+                    <asp:Repeater ID="rProduct" runat="server" OnItemCommand="rProduct_ItemCommand">
                         <HeaderTemplate>
                             <table class="table data-table-export table-hover nowrap">
                                 <thead>
@@ -33,26 +33,40 @@
                                 <td><%# Eval("UserId") %></td>
                                 <td><%# Eval("PaymentMethod") %></td>
                                 <td>
-                                    <asp:DropDownList ID="ddlOrderStatus" runat="server" CssClass="form-control"
-                                        AutoPostBack="true" OnSelectedIndexChanged="ddlOrderStatus_SelectedIndexChanged">
-                                    </asp:DropDownList>
+                                    <asp:Label ID="lblOrderStatus" runat="server" Text='<%# Eval("OrderStatusName") %>'></asp:Label>
                                 </td>
                                 <td><%# Eval("CreatedTime") %></td>
                                 <td>
                                     <asp:LinkButton CommandName="edit" runat="server" ID="lbEdit" Text="Edit" CssClass="badge badge-primary"
                                         CommandArgument='<%#Eval("Id") %>' CausesValidation="false">
-                    <i class="fas fa-edit"></i>
+                                         <i class="fas fa-edit"></i>
                                     </asp:LinkButton>
                                 </td>
+
                             </tr>
                         </ItemTemplate>
                         <FooterTemplate>
                             </tbody>
-    </table>
+                            </table>
                         </FooterTemplate>
                     </asp:Repeater>
 
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Order Details</h4>
+                <hr />
+                <div>
+                    <asp:Label ID="lblSelectedOrderId" runat="server" Text=""></asp:Label>
+                    <asp:DropDownList ID="ddlOrderStatusEdit" runat="server" CssClass="form-control">
+                    </asp:DropDownList>
+                    <asp:Button ID="btnUpdateOrderStatus" Enabled="false" runat="server" Text="Update" CssClass="btn btn-primary mt-3" OnClick="btnUpdateOrderStatus_Click" />
                 </div>
             </div>
         </div>

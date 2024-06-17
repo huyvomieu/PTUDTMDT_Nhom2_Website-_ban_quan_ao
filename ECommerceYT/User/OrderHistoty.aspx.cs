@@ -89,6 +89,11 @@ namespace ECommerceYT.User
             // Implement this method to get UserId from session or authentication system
             int userId = -1; // Khởi tạo giá trị mặc định
 
+            if (Session["UserName"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
+
             string usernameToSelect = Session["UserName"].ToString();
 
             using (SqlConnection con = new SqlConnection(Utils.getConnection()))

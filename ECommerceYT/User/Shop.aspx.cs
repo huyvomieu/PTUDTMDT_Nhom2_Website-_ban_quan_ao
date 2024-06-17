@@ -208,24 +208,38 @@ namespace ECommerceYT.User
         {
             if (!string.IsNullOrEmpty(txtMinPrice.Text) && !string.IsNullOrEmpty(txtMaxPrice.Text))
             {
-                var minPrice = decimal.Parse(txtMinPrice.Text);
-                var maxPrice = decimal.Parse(txtMaxPrice.Text);
-                DataTable dt = SearchByPriceRange(minPrice, maxPrice); // Gọi hàm tìm kiếm 
+                try
+                {
+                    var minPrice = decimal.Parse(txtMinPrice.Text);
+                    var maxPrice = decimal.Parse(txtMaxPrice.Text);
 
-                // Bind kết quả tìm kiếm vào Repeater hoặc GridView
-                rptProducts.DataSource = dt;
-                rptProducts.DataBind();
+                    // Logging giá trị đầu vào
+                    System.Diagnostics.Debug.WriteLine($"minPrice: {minPrice}, maxPrice: {maxPrice}");
+
+                    DataTable dt = SearchByPriceRange(minPrice, maxPrice); // Gọi hàm tìm kiếm 
+
+
+                    // Bind kết quả tìm kiếm vào Repeater hoặc GridView
+                    rptProducts.DataSource = dt;
+                    rptProducts.DataBind();
+                }
+                catch (FormatException ex)
+                {
+                    // Logging lỗi định dạng
+                    System.Diagnostics.Debug.WriteLine($"Error parsing prices: {ex.Message}");
+                }
             }
         }
+
 
         private DataTable SearchByPriceRange(decimal minPrice, decimal maxPrice)
         {
             using (SqlConnection con = new SqlConnection(Utils.getConnection()))
             {
-                using (SqlCommand cmd = new SqlCommand("Product_Crud", con))
+                string query = "SELECT * FROM Product WHERE Price > @MinPrice AND Price < @MaxPrice";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Action", "SEARCHBYPRICERANGE");
                     cmd.Parameters.AddWithValue("@MinPrice", minPrice);
                     cmd.Parameters.AddWithValue("@MaxPrice", maxPrice);
 
@@ -239,6 +253,5 @@ namespace ECommerceYT.User
             }
         }
 
-        
     }
 }

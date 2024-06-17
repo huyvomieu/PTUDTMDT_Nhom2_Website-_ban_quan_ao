@@ -131,6 +131,7 @@ namespace ECommerceYT.Admin
                     lblMsg.Visible = true;
                     lblMsg.Text = "Product" + actionName + "succesfully";
                     lblMsg.CssClass = "alert alert-success";
+                    Clear();
                     getProduct();
                 }
                 catch (Exception ex)

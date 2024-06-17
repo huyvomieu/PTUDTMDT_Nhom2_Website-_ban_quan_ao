@@ -11,7 +11,36 @@ namespace ECommerceYT.Admin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            CheckLogin();
+        }
 
+        public string GetImageUrlFromSession()
+        {
+            object imageUrl = Session["ImageUrlAdmin"];
+            return Utils.GetImageUrl(imageUrl);
+        }
+
+        protected void lnkLogout_Click(object sender, EventArgs e)
+        {
+            Logout();
+        }
+
+        public void Logout()
+        {
+            // Xóa tất cả thông tin trong Session
+            Session.Clear();
+            Session.Abandon();
+
+            // Chuyển hướng về trang đăng nhập
+            Response.Redirect("~/Admin/Login.aspx");
+        }
+
+        private void CheckLogin()
+        {
+            if (Session["UserNameAdmin"] == null)
+            {
+                Response.Redirect("~/Admin/Login.aspx");
+            }
         }
     }
 }

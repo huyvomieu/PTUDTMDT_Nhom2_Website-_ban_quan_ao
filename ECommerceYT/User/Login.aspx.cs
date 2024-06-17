@@ -19,12 +19,17 @@ namespace ECommerceYT.User
         {
             string username = txtUserName.Text.Trim();
             string password = txtPassword.Text.Trim();
+            string name, imageUrl;
+            int roleId;
 
-            if (AuthenticateUser(username, password))
+            if (AuthenticateUser(username, password, out name, out imageUrl, out roleId))
             {
                 // Lưu thông tin người dùng vào session và chuyển hướng đến trang chủ
                 Session["UserName"] = username;
-                Response.Redirect("~/User/Default.aspx");
+                Session["Name"] = name;
+                Session["ImageUrl"] = imageUrl;
+                Session["RoleId"] = roleId;
+                Response.Redirect("Default.aspx");
             }
             else
             {
@@ -32,23 +37,33 @@ namespace ECommerceYT.User
             }
         }
 
-        private bool AuthenticateUser(string username, string password)
+        private bool AuthenticateUser(string username, string password, out string name, out string imageUrl, out int roleId)
         {
             bool isAuthenticated = false;
+            name = string.Empty;
+            imageUrl = string.Empty;
+            roleId = -1;
+
+
             string connectionString = Utils.getConnection();
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT COUNT(1) FROM Users WHERE UserName=@UserName AND Password=@Password";
+                string query = "SELECT Name, ImageUrl, RoleId FROM Users WHERE UserName=@UserName AND Password=@Password";
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@UserName", username);
                 cmd.Parameters.AddWithValue("@Password", password);
 
                 con.Open();
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                if (count == 1)
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    isAuthenticated = true;
+                    if (reader.Read())
+                    {
+                        name = reader["Name"].ToString();
+                        imageUrl = reader["ImageUrl"].ToString();
+                        roleId = Convert.ToInt32(reader["RoleId"]);
+                        isAuthenticated = true;
+                    }
                 }
             }
             return isAuthenticated;

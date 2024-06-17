@@ -12,11 +12,11 @@
                 <div class="d-flex d-lg-flex d-md-block align-items-center">
                     <div>
                         <div class="d-inline-flex align-items-center">
-                            <h2 class="text-dark mb-1 font-weight-medium">236</h2>
+                            <h2 class="text-dark mb-1 font-weight-medium"><%=TotalProduct() %></h2>
                             <span
                                 class="badge bg-primary font-12 text-white font-weight-medium badge-pill ml-2 d-lg-block d-md-none">+18.33%</span>
                         </div>
-                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Clients</h6>
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Products</h6>
                     </div>
                     <div class="ml-auto mt-md-3 mt-lg-0">
                         <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
@@ -29,7 +29,7 @@
                 <div class="d-flex d-lg-flex d-md-block align-items-center">
                     <div>
                         <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                            class="set-doller">$</sup>18,306</h2>
+                            class="set-doller">$</sup><%=GetTotalOrderAmount() %></h2>
                         <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Earnings of Month
                         </h6>
                     </div>
@@ -44,11 +44,11 @@
                 <div class="d-flex d-lg-flex d-md-block align-items-center">
                     <div>
                         <div class="d-inline-flex align-items-center">
-                            <h2 class="text-dark mb-1 font-weight-medium">1538</h2>
+                            <h2 class="text-dark mb-1 font-weight-medium"><%=TotalUser() %></h2>
                             <span
                                 class="badge bg-danger font-12 text-white font-weight-medium badge-pill ml-2 d-md-none d-lg-block">-18.33%</span>
                         </div>
-                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Projects</h6>
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Users</h6>
                     </div>
                     <div class="ml-auto mt-md-3 mt-lg-0">
                         <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
@@ -60,8 +60,8 @@
             <div class="card-body">
                 <div class="d-flex d-lg-flex d-md-block align-items-center">
                     <div>
-                        <h2 class="text-dark mb-1 font-weight-medium">864</h2>
-                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Projects</h6>
+                        <h2 class="text-dark mb-1 font-weight-medium"><%=TotalCategory() %></h2>
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Total Category</h6>
                     </div>
                     <div class="ml-auto mt-md-3 mt-lg-0">
                         <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
@@ -78,30 +78,32 @@
     <!-- *************************************************************** -->
     <div class="row">
         <div class="col-lg-4 col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Total Sales</h4>
-                    <div id="campaign-v2" class="mt-2" style="height: 283px; width: 100%;"></div>
-                    <ul class="list-style-none mb-0">
-                        <li>
-                            <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                            <span class="text-muted">Direct Sales</span>
-                            <span class="text-dark float-right font-weight-medium">$2346</span>
-                        </li>
-                        <li class="mt-3">
-                            <i class="fas fa-circle text-danger font-10 mr-2"></i>
-                            <span class="text-muted">Referral Sales</span>
-                            <span class="text-dark float-right font-weight-medium">$2108</span>
-                        </li>
-                        <li class="mt-3">
-                            <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                            <span class="text-muted">Affiliate Sales</span>
-                            <span class="text-dark float-right font-weight-medium">$1204</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Total Sales</h4>
+            <div id="campaign-v2" class="mt-2" style="height: 283px; width: 100%;"></div>
+            <ul class="list-style-none mb-0">
+                <%-- Dynamically populate list of top selling products --%>
+                <% int colorIndex = 0; %>
+                <% foreach (System.Data.DataRow row in GetTopSellingProducts().Rows) { %>
+                    <%-- Determine color class based on index --%>
+                    <% string[] chartColors = { "primary", "danger", "cyan", "success", "info" }; %>
+                    <% string colorClass = chartColors[colorIndex % chartColors.Length]; %>
+
+                    <li class="mt-3">
+                        <i class="fas fa-circle text-<%= colorClass %> font-10 mr-2"></i>
+                        <span class="text-muted"><%= row["ProductName"] %></span>
+                        <span class="text-dark float-right font-weight-medium">$<%= Convert.ToDecimal(row["TotalSales"]).ToString("N2") %></span>
+                    </li>
+                    
+                    <% colorIndex++; %>
+                <% } %>
+            </ul>
         </div>
+    </div>
+</div>
+
+
         <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-body">

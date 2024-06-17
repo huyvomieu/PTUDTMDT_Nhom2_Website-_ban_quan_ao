@@ -11,6 +11,7 @@ namespace ECommerceYT.User
 {
     public partial class User : System.Web.UI.MasterPage
     {
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Request.Url.AbsoluteUri.ToString().Contains("Default.aspx"))
@@ -32,23 +33,34 @@ namespace ECommerceYT.User
             if (Session["UserName"] != null)
             {
                 string username = Session["UserName"].ToString();
+                //an btn log in
                 loginBtnMaster.Visible = false;
                 registerBtnMaster.Visible = false;
                 userInfoPanel.Visible = true;
-                litUserInfo.Text = $"Welcome, {username}!";
+
             }
             else
             {
                 loginBtnMaster.Visible = true;
                 registerBtnMaster.Visible = true;
                 userInfoPanel.Visible = false;
-                litUserInfo.Text = string.Empty;
+
             }
         }
 
-        protected void Logout_Click(object sender, EventArgs e)
+        public string GetImageUrlFromSession()
         {
-            Session["UserName"] = null;
+            object imageUrl = Session["ImageUrl"];
+            return Utils.GetImageUrl(imageUrl);
+        }
+
+        public void Logout()
+        {
+            // Xóa tất cả thông tin trong Session
+            Session.Clear();
+            Session.Abandon();
+
+            // Chuyển hướng về trang đăng nhập
             Response.Redirect("Default.aspx");
         }
 
@@ -86,5 +98,20 @@ namespace ECommerceYT.User
             rptCategories.DataBind();
         }
 
+        protected int GetUserId()
+        {
+            if (Session["UserName"] != null)
+            {
+                var username = Session["UserName"].ToString();
+                var id = Utils.GetUserIdFromSession(username);
+                return id;
+            }
+            return 1300;
+        }
+
+        protected void lbtnLogout_Click(object sender, EventArgs e)
+        {
+            Logout();
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 using ECommerceYT.Models;
+using Org.BouncyCastle.Tls;
 
 namespace ECommerceYT
 {
@@ -59,7 +60,6 @@ namespace ECommerceYT
             return url1;
         }
 
-
         public static string GetIsActiveText(object isActive)
         {
             if (isActive == null || isActive == DBNull.Value)
@@ -79,7 +79,6 @@ namespace ECommerceYT
 
             return (bool)isActive ? "badge badge-success" : "badge badge-danger";
         }
-
 
         public static List<Role> GetAllRole()
         {
@@ -105,7 +104,6 @@ namespace ECommerceYT
             }
             return roles;
         }
-
 
         public static List<Category> GetAllCategory()
         {
@@ -167,7 +165,6 @@ namespace ECommerceYT
             }
             return products;
         }
-
 
         public static List<Product> GetProductsSortedByCreatedDate()
         {
@@ -279,5 +276,41 @@ namespace ECommerceYT
             return user;
         }
 
+        public static void CheckLoginStatus()
+        {
+            if (HttpContext.Current.Session["UserName"] == null)
+            {
+                // Chuyển hướng về trang đăng nhập nếu người dùng chưa đăng nhập
+                HttpContext.Current.Response.Redirect("~/User/Login.aspx");
+            }
+            
+        }
+
+        public static int GetUserIdFromSession(string usernameToSelect)
+        {
+            // Implement this method to get UserId from session or authentication system
+            int userId = -1; // Khởi tạo giá trị mặc định
+
+            using (SqlConnection con = new SqlConnection(Utils.getConnection()))
+            {
+                string query = "SELECT TOP 1 UserId FROM Users WHERE UserName = @UserName";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@UserName", usernameToSelect);
+
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        userId = reader.GetInt32(0); // Lấy giá trị UserId từ kết quả truy vấn
+                    }
+
+                    reader.Close();
+                }
+            }
+
+            return userId;
+        }
     }
 }

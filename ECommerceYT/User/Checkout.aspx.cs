@@ -16,6 +16,7 @@ namespace ECommerceYT.User
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Utils.CheckLoginStatus();
             if (!IsPostBack)
             {
                 BindCart();

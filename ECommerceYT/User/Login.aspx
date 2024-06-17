@@ -50,6 +50,8 @@
             text-align: center;
             margin-bottom: 15px;
         }
+
+
     </style>
 </head>
 <body>
@@ -67,6 +69,9 @@
             </div>
             <div class="form-group">
                 <asp:Button ID="btnLogin" runat="server" Text="Login" CssClass="btn btn-primary" OnClick="btnLogin_Click" />
+                <div class="col-lg-12 mt-3">
+                    <p class="mb-0 text-center">Don't have account? <a href="Register.aspx">Register Now</a></p>
+                </div>
             </div>
         </div>
     </form>

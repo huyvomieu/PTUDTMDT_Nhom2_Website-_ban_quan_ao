@@ -64,7 +64,7 @@
 
                 <div class="row align-items-center py-3 px-xl-5">
                     <div class="col-lg-3 d-none d-lg-block">
-                        <a href="" class="text-decoration-none">
+                        <a href="Default.aspx" class="text-decoration-none">
                             <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
                         </a>
                     </div>
@@ -75,7 +75,7 @@
                             <i class="fas fa-heart text-primary"></i>
                             <span class="badge">0</span>
                         </a>
-                        <a href="" class="btn border">
+                        <a href="Cart.aspx" class="btn border">
                             <i class="fas fa-shopping-cart text-primary"></i>
                             <span class="badge">0</span>
                         </a>
@@ -114,7 +114,7 @@
                                 <div class="navbar-nav mr-auto py-0">
                                     <a href="Default.aspx" class="nav-item nav-link">Home</a>
                                     <a href="Shop.aspx" class="nav-item nav-link">Shop</a>
-                                    <a href="ShopDetail.aspx" class="nav-item nav-link">Shop Detail</a>
+                                    <a href="OrderHistoty.aspx" class="nav-item nav-link">Order History</a>
                                     <div class="nav-item dropdown">
                                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                                         <div class="dropdown-menu rounded-0 m-0">
@@ -125,10 +125,40 @@
                                     <a href="Contact.aspx" class="nav-item nav-link">Contact</a>
                                 </div>
 
-                                <asp:Panel ID="userInfoPanel" runat="server" Visible="false">
-                                    <asp:Literal ID="litUserInfo" runat="server"></asp:Literal>
-                                    <asp:LinkButton ID="logoutBtnMaster" runat="server" OnClick="Logout_Click">Logout</asp:LinkButton>
-                                </asp:Panel>
+                                <div class="navbar-nav mr-auto py-0">
+                                    <asp:Panel ID="userInfoPanel" runat="server" Visible="false">
+                                        <ul class="navbar-nav float-right">
+                                            <%-- xem lai dropdown menu --%>
+                                            <!-- ============================================================== -->
+                                            <!-- User profile and search -->
+                                            <!-- ============================================================== -->
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <img src='<%= GetImageUrlFromSession() %>' alt="user" class="rounded-circle" width="40">
+                                                    <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
+                                                        class="text-dark"><%= Session["Name"] %></span> <i data-feather="chevron-down"
+                                                            class="svg-icon"></i></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                                    <a class="dropdown-item" href="UserInfor.aspx?UserId=<%= GetUserId() %>"><i data-feather="user"
+                                                        class="svg-icon mr-2 ml-1"></i>
+                                                        My Profile</a>
+
+                                                    <div class="dropdown-divider"></div>
+                                                    <asp:LinkButton ID="lbtnLogout" runat="server" CssClass="dropdown-item" OnClick="lbtnLogout_Click"><i data-feather="power"
+                                                        class="svg-icon mr-2 ml-1"></i>
+                                                        Logout</asp:LinkButton>
+                                                    <div class="dropdown-divider"></div>
+
+                                                </div>
+                                            </li>
+                                            <!-- ============================================================== -->
+                                            <!-- User profile and search -->
+                                            <!-- ============================================================== -->
+                                        </ul>
+                                    </asp:Panel>
+                                </div>
 
                                 <div class="navbar-nav ml-auto py-0">
                                     <asp:Label ID="loginBtnMaster" runat="server">
@@ -136,7 +166,7 @@
                                     </asp:Label>
 
                                     <asp:Label ID="registerBtnMaster" runat="server">
-                                        <a href="" class="nav-item nav-link">Register</a>
+                                        <a href="Register.aspx" class="nav-item nav-link">Register</a>
                                     </asp:Label>
 
 

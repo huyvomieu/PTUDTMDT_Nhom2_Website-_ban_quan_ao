@@ -13,6 +13,11 @@ namespace ECommerceYT.User
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!LoginCheck())
+            {
+                // Nếu chưa đăng nhập, chuyển hướng tới trang đăng nhập
+                Response.Redirect("~/User/Login.aspx");
+            }
             if (!IsPostBack)
             {
                 if (Request.QueryString["OrderId"] != null)
@@ -20,7 +25,17 @@ namespace ECommerceYT.User
                     int orderId = Convert.ToInt32(Request.QueryString["OrderId"]);
                     BindOrderDetails(orderId);
                 }
+
             }
+        }
+
+        private bool LoginCheck()
+        {
+            if (Session["UserName"] != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void BindOrderDetails(int orderId)

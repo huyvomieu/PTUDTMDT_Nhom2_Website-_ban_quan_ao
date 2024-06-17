@@ -17,6 +17,7 @@ namespace ECommerceYT.Admin
             if (!IsPostBack)
             {
                 BindOrderData();
+                LoadOrderStatusDropDown();
             }
         }
 
@@ -43,47 +44,39 @@ namespace ECommerceYT.Admin
             }
         }
 
-        protected void rCategory_ItemCommand(object source, RepeaterCommandEventArgs e)
+        private void LoadOrderStatusDropDown()
         {
-        }
-
-        protected void rProduct_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            using (SqlConnection con = new SqlConnection(Utils.getConnection()))
             {
-                DataRowView drv = e.Item.DataItem as DataRowView;
-                if (drv != null)
+                using (SqlCommand cmd = new SqlCommand("SELECT Id, Name FROM OrderStatus", con))
                 {
-                    DropDownList ddlOrderStatus = e.Item.FindControl("ddlOrderStatus") as DropDownList;
-                    if (ddlOrderStatus != null)
-                    {
-                        // Bind dropdownlist with order status from database
-                        ddlOrderStatus.DataSource = GetOrderStatusList(); // Replace with your method to get order status list
-                        ddlOrderStatus.DataTextField = "Name"; // Change this to your actual field name for display
-                        ddlOrderStatus.DataValueField = "Id"; // Change this to your actual field name for value
-                        ddlOrderStatus.DataBind();
-
-                        // Set selected value based on current order status
-                        string currentOrderStatusId = drv["Id"].ToString();
-                        ddlOrderStatus.SelectedValue = currentOrderStatusId;
-                    }
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    ddlOrderStatusEdit.DataSource = rdr;
+                    ddlOrderStatusEdit.DataTextField = "Name";
+                    ddlOrderStatusEdit.DataValueField = "Id";
+                    ddlOrderStatusEdit.DataBind();
+                    con.Close();
                 }
             }
         }
 
-        protected void ddlOrderStatus_SelectedIndexChanged(object sender, EventArgs e)
+        protected void btnUpdateOrderStatus_Click(object sender, EventArgs e)
         {
-            DropDownList ddlOrderStatus = sender as DropDownList;
-            RepeaterItem item = ddlOrderStatus.NamingContainer as RepeaterItem;
-            if (item != null)
-            {
-                int orderId = Convert.ToInt32(DataBinder.Eval(item.DataItem, "Id"));
-                int newOrderStatusId = Convert.ToInt32(ddlOrderStatus.SelectedValue);
+            // Xử lý cập nhật OrderStatus khi người dùng nhấn nút Update
+            // Lấy Id của đơn hàng được chọn từ Label lblSelectedOrderId
+            int orderId = Convert.ToInt32(lblSelectedOrderId.Text);
 
-                // Update order status in database
-                UpdateOrderStatus(orderId, newOrderStatusId);
-            }
+            // Lấy giá trị OrderStatus mới từ DropDownList ddlOrderStatusEdit
+            int newOrderStatusId = Convert.ToInt32(ddlOrderStatusEdit.SelectedValue);
+
+            // Thực hiện câu lệnh cập nhật trong database
+            UpdateOrderStatus(orderId, newOrderStatusId);
+
+            // Sau khi cập nhật, cần reload dữ liệu đơn hàng
+            BindOrderData();
         }
+
 
         private void UpdateOrderStatus(int orderId, int newOrderStatusId)
         {
@@ -101,32 +94,13 @@ namespace ECommerceYT.Admin
                 }
             }
         }
-
-
-        private List<OrderStatus> GetOrderStatusList()
+        protected void rProduct_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            List<OrderStatus> orderStatuses = new List<OrderStatus>();
-            string query = "SELECT Id, Name FROM OrderStatus";
-
-            using (SqlConnection con = new SqlConnection(Utils.getConnection()))
+            if(e.CommandName == "edit")
             {
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    con.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        int orderStatusId = Convert.ToInt32(reader["Id"]);
-                        string name = reader["Name"].ToString();
-                        OrderStatus orderStatus = new OrderStatus(orderStatusId, name);
-                        orderStatuses.Add(orderStatus);
-                    }
-                    con.Close();
-                }
+                lblSelectedOrderId.Text = e.CommandArgument.ToString();
+                btnUpdateOrderStatus.Enabled = true;
             }
-
-            return orderStatuses;
         }
-
     }
 }
