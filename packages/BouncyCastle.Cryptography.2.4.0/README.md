@@ -42,4 +42,4 @@ For bug reporting/requests you can report issues on [github](https://github.com/
 
 ## Finally
 
-Enjoy!
+Enjoy! 
