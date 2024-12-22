@@ -57,7 +57,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <asp:TextBox ID="txtProductName" runat="server" CssClass="form-control" placeholder="Enter ProdcutName"></asp:TextBox>
+                                    <asp:TextBox ID="txtProductName" runat="server" CssClass="form-control" placeholder="Enter ProductName"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rvfProductName" runat="server" ForeColor="Red" Font-Size="Small"
                                         Display="Dynamic" SetFocusOnError="true" ControlToValidate="txtProductName"
                                         ErrorMessage="Product Name is required"></asp:RequiredFieldValidator>
