@@ -8,7 +8,7 @@
             setTimeout(function () {
                 document.getElementById("<%= lblMsg.ClientID %>").style.display = "none";
             }, seconds * 1000);
-        };
+       };
 
     </script>
 
@@ -107,41 +107,6 @@
                             </div>
                         </div>
                     </div>
-
-
-<%--                    <div class="form-body">
-                        <label>Color</label>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <asp:TextBox ID="txtColor" runat="server" CssClass="form-control" placeholder="Color"></asp:TextBox>
-                                    <asp:RequiredFieldValidator ID="rvfPostCode" runat="server" ForeColor="Red" Font-Size="Small"
-                                        Display="Dynamic" SetFocusOnError="true" ControlToValidate="txtColor"
-                                        ErrorMessage="Color is required"></asp:RequiredFieldValidator>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="form-body">
-                        <label>Size</label>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <asp:DropDownList ID="ddlSize" runat="server" CssClass="form-control">
-                                        <asp:ListItem Text="M" Value="M"></asp:ListItem>
-                                        <asp:ListItem Text="L" Value="L"></asp:ListItem>
-                                        <asp:ListItem Text="XL" Value="XL"></asp:ListItem>
-                                    </asp:DropDownList>
-                                    <asp:RequiredFieldValidator ID="rvfSize" runat="server" ForeColor="Red" Font-Size="Small"
-                                        Display="Dynamic" SetFocusOnError="true" ControlToValidate="ddlSize"
-                                        ErrorMessage="Size is required"></asp:RequiredFieldValidator>
-                                    <asp:HiddenField ID="hfProductSize" runat="server" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>--%>
 
 
                       <div class="form-body">
